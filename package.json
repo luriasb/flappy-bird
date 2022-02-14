@@ -7,9 +7,11 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@orange-games/phaser-spine": "^3.0.9",
     "vite": "^2.7.2"
   },
   "dependencies": {
-    "phaser": "^3.55.2"
+    "phaser": "^3.55.2",
+    "phaser3-rex-plugins": "^1.1.66"
   }
 }

@@ -7,7 +7,7 @@ class PauseScene extends BaseScene {
 
     this.menu = [
       { scene: 'PlayScene', text: 'Continue'},
-      { cene: 'MenuScene', text: 'Exit'}
+      // { cene: 'MenuScene', text: 'Exit'}
    ]
   }
 
@@ -19,26 +19,44 @@ class PauseScene extends BaseScene {
   }
 
   setupMenuEvents(menuItem) {
-    const textGO = menuItem.textGO
-    textGO.setInteractive()
+    const image = menuItem.image
+    image.setInteractive()
 
-    textGO.on('pointerover', () => {
-      textGO.setStyle({ fill: '#ff0'})
+    image.on('pointerover', () => {
+      // image.setStyle({ fill: '#666'})
+      
     })
 
-    textGO.on('pointerout', () => {
-      textGO.setStyle({ fill: '#fff'})
+    image.on('pointerout', () => {
+      // image.setStyle({ fill: '#000'})
     })
 
-    textGO.on('pointerup', () => {
+    image.on('pointerdown', () => {
+      image.setScale(.7)
+    })
+
+    image.on('pointerup', () => {
+      image.setScale(.75)
+
       if(menuItem.text && menuItem.text === 'Continue') {
-        this.scene.stop()
-        this.scene.resume(menuItem.scene)
+        
+        setTimeout(() => {
+          this.scene.stop()
+          this.scene.resume(menuItem.scene)
+        }, 100)
       } else {
         this.scene.stop('PlayScene')
         this.scene.start('MenuScene')
       }
+
+      
+
+      // if(menuItem.text === 'Exit') {
+      //   this.game.destroy(true)
+      // }
     })
+
+    
   }
 
 }

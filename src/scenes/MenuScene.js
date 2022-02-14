@@ -7,32 +7,51 @@ class MenuScene extends BaseScene {
 
     this.menu = [
       { scene: 'PlayScene', text: 'Play'},
-      { scene: 'ScoreScene', text: 'Score'},
-      { cene: null, text: 'Exit'}
+      // { cene: null, text: 'Exit'}
    ]
   }
 
   create() {
     super.create()
-
     this.createMenu(this.menu, this.setupMenuEvents.bind(this))
+    this.createTitle()
+    this.createBestScore()
+  }
 
+  createTitle() {
+    this.add.image(this.screenCenter[0], this.screenCenter[1] - 200, 'gameTitle' ).setOrigin(.5);
+  }
+
+  createBestScore() {
+    this.add.image(this.screenCenter[0], this.screenCenter[1] - 25, 'scoreBackground')
+    this.score = 0
+    const bestScore = localStorage.getItem('bestScore')
+    this.bestScoreText = this.add.text(this.screenCenter[0], this.screenCenter[1] - 25, bestScore || 0, { fontSize: '40px', fill: '#fff'}).setOrigin(.5)
   }
 
   setupMenuEvents(menuItem) {
-    const textGO = menuItem.textGO
-    textGO.setInteractive()
+    const image = menuItem.image
+    image.setInteractive()
 
-    textGO.on('pointerover', () => {
-      textGO.setStyle({ fill: '#ff0'})
+    image.on('pointerover', () => {
+      // image.setStyle({ fill: '#666'})
+      
     })
 
-    textGO.on('pointerout', () => {
-      textGO.setStyle({ fill: '#fff'})
+    image.on('pointerout', () => {
+      // image.setStyle({ fill: '#000'})
     })
 
-    textGO.on('pointerup', () => {
-      menuItem.scene && this.scene.start(menuItem.scene)
+    image.on('pointerdown', () => {
+      image.setScale(.7)
+    })
+
+    image.on('pointerup', () => {
+      image.setScale(.75)
+
+      setTimeout(() => {
+        menuItem.scene && this.scene.start(menuItem.scene)
+      }, 100)
 
       if(menuItem.text === 'Exit') {
         this.game.destroy(true)

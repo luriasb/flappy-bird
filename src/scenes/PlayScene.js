@@ -23,15 +23,15 @@ class PlayScene extends BaseScene {
     this.difficulties = {
       'easy': {
         pipeHorizontalDistanceRange: [300, 400],
-        pipeVerticalDistanceRange: [150, 200],
+        pipeVerticalDistanceRange: [300, 400],
       },
       'normal': {
-        pipeHorizontalDistanceRange: [280, 330],
-        pipeVerticalDistanceRange: [140, 190],
+        pipeHorizontalDistanceRange: [280, 380],
+        pipeVerticalDistanceRange: [250, 350],
       },
       'hard': {
-        pipeHorizontalDistanceRange: [250, 310],
-        pipeVerticalDistanceRange: [120, 170],
+        pipeHorizontalDistanceRange: [250, 350],
+        pipeVerticalDistanceRange: [200, 250],
       },
     }
 
@@ -54,10 +54,12 @@ class PlayScene extends BaseScene {
 
     this.anims.create({
       key: 'fly',
-      frames: this.anims.generateFrameNumbers('bird', {start: 8, end: 15}),
-      frameRate: 8,
+      frames: this.anims.generateFrameNumbers('bird', {start: 0, end: 19}),
+      frameRate: 10,
       repeat: -1
     })
+
+    this.currentDiffilculty = 'easy'
 
     this.bird.play('fly')
   }
@@ -78,11 +80,13 @@ class PlayScene extends BaseScene {
         this.config.startPosition.y,
         "bird"
       )
-      .setFlipX(true)
-      .setScale(3)
+      // .setFlipX(true)
+      .setScale(.7)
       .setOrigin(0, 0);
       
-      this.bird.setBodySize(this.bird.width, this.bird.height - 8)
+      this.bird.setBodySize(this.bird.width * .5, this.bird.height * .5)
+
+      // debugger
 
     this.bird.body.gravity.y = 600;
   }
@@ -92,10 +96,10 @@ class PlayScene extends BaseScene {
 
     for (let i = 0; i < this.PIPES_TO_RENDER; i++) {
 
-      const upperPipe = this.pipes.create(0, 0, 'pipe')
+      const upperPipe = this.pipes.create(0, 0, 'upperPipe')
       .setImmovable(true)                  
       .setOrigin(0, 1)
-      const lowerPipe = this.pipes.create(0, 0, 'pipe')
+      const lowerPipe = this.pipes.create(0, 0, 'lowerPipe')
       .setImmovable(true)
       .setOrigin(0, 0)
 
@@ -111,10 +115,13 @@ class PlayScene extends BaseScene {
   }
 
   createScore() {
+    // this.score = 0
+    // const bestScore = localStorage.getItem('bestScore')
+    // this.scoreText = this.add.text(16, 16, `Score: ${0}`, { fontSize: '32px', fill: '#000'})
+    // this.bestScoreText = this.add.text(16, 52, `Best score: ${bestScore || 0}`, { fontSize: '18px', fill: '#000'})
+    this.add.image(this.screenCenter[0], this.screenCenter[1] - 225, 'scoreBackground')
     this.score = 0
-    const bestScore = localStorage.getItem('bestScore')
-    this.scoreText = this.add.text(16, 16, `Score: ${0}`, { fontSize: '32px', fill: '#000'})
-    this.bestScoreText = this.add.text(16, 52, `Best score: ${bestScore || 0}`, { fontSize: '18px', fill: '#000'})
+    this.scoreText = this.add.text(this.screenCenter[0], this.screenCenter[1] - 225, this.score, { fontSize: '40px', fill: '#fff'}).setOrigin(.5)
   }
 
   createPause() {
@@ -163,7 +170,7 @@ class PlayScene extends BaseScene {
   }
 
   checkGameStatus() {
-    if(this.bird.getBounds().bottom >= this.config.height || this.bird.y <= 0){
+    if(this.bird.body.bottom >= this.config.height || this.bird.body.y <= 0){
       this.gameOver()
     }
   }
@@ -237,11 +244,11 @@ class PlayScene extends BaseScene {
   }
 
   increaseDifficulty() {
-    if(this.score === 1) {
+    if(this.score === 10) {
       this.currentDiffilculty = 'normal'
     }
 
-    if(this.score === 3) {
+    if(this.score === 20) {
       this.currentDiffilculty = 'hard'
     }
   }
@@ -253,7 +260,7 @@ class PlayScene extends BaseScene {
 
   increaseScore() {
     this.score++
-    this.scoreText.setText(`Score: ${this.score}`)
+    this.scoreText.setText(`${this.score}`)
   }
 
 }
